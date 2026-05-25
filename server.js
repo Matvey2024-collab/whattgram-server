@@ -276,10 +276,8 @@ const messageSchema = new mongoose.Schema({
 const Message = mongoose.model('Message', messageSchema);
 
 app.use(express.json({ limit: '20mb' }));
-app.use(express.static(__dirname, { index: 'index.html' }));
-
 app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/index.html');
+    res.json({ status: 'WhattGram Server', version: CURRENT_VERSION });
 });
 
 let onlineUsers = {};
@@ -1700,11 +1698,12 @@ io.on('connection', (socket) => {
 });
 
 const PORT = process.env.PORT || 3000;
+const HOST = process.env.IP || '0.0.0.0';
 server.on('error', (err) => {
     console.error(`>>> [SERVER] Ошибка: ${err.message}`);
 });
 
-server.listen(PORT, '0.0.0.0', () => {
-    console.log(`>>> [SERVER] Запуск на порту ${PORT}`);
+server.listen(PORT, HOST, () => {
+    console.log(`>>> [SERVER] Запуск на порту ${PORT} (${HOST})`);
     initSystemUser();
 });
